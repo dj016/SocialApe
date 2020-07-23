@@ -8,6 +8,7 @@ import {
 } from "../types";
 import axios from "axios";
 export const loginUser = (userData, history) => (dispatch) => {
+  dispatch({ type: CLEAR_ERRORS });
   dispatch({ type: LOADING_UI });
   axios
     .post("/login", userData)
@@ -25,6 +26,7 @@ export const loginUser = (userData, history) => (dispatch) => {
 
 export const signupUser = (newUserData, history) => (dispatch) => {
   console.log("came here");
+  dispatch({ type: CLEAR_ERRORS });
   dispatch({ type: LOADING_UI });
   axios
     .post("/signup", newUserData)
@@ -56,6 +58,24 @@ export const getUserData = () => (dispatch) => {
       dispatch({ type: SET_USER, payload: res.data });
     })
     .catch((error) => console.log(error));
+};
+
+export const uploadImage = (formData) => (dispatch) => {
+  dispatch({ type: LOADING_USER });
+  axios
+    .post("user/image", formData)
+    .then(() => dispatch(getUserData()))
+    .catch((err) => console.log(err));
+};
+
+export const editUserDetails = (userDetails) => (dispatch) => {
+  dispatch({ type: LOADING_USER });
+  axios
+    .post("/user", userDetails)
+    .then(() => {
+      dispatch(getUserData());
+    })
+    .catch((err) => console.log(err));
 };
 
 const setAuthorization = (res) => {
